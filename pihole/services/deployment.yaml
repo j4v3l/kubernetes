@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbital-sync
+  namespace: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orbital-sync
+  template:
+    metadata:
+      labels:
+        app: orbital-sync
+    spec:
+      containers:
+        - name: orbital-sync
+          image: your-orbital-sync-image:latest
+          envFrom:
+            - configMapRef:
+                name: orbital-sync-config

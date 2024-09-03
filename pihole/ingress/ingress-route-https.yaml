@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pihole-server-https
+  namespace: pihole
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`pihole.javel.tech`)
+      priority: 10
+      middlewares:
+        - name: redirect-admin-page
+          namespace: pihole
+      services:
+        - name: pihole-web-svc
+          port: 80
+  tls:
+    secretName: pihole-tls
