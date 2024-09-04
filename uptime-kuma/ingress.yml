@@ -1,23 +1,15 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: uptime-kuma-ingress
-  namespace: uptime-kuma
   annotations: 
     kubernetes.io/ingress.class: traefik-internal 
 spec:
-  rules:
-    - host: uptime.javel.tech
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: uptime-kuma
-                port:
-                  number: 3001
-  tls:
-    - hosts:
-        - uptime.javel.tech
-      secretName: uptime-kuma-tls-secret
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`uptime.javel.tech`)
+      kind: Rule
+      services:
+        - name: uptime-kuma
+          port: 3001
